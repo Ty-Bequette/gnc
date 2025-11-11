@@ -40,6 +40,9 @@ void loop(void)
     digitalWrite(15, HIGH);
     Serial.println("Within threshold");
   }
+  else {
+    digitalWrite(15, LOW);
+  }
 
   
   delay(100);
