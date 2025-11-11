@@ -37,7 +37,7 @@ void loop(void)
   Serial.print("X: ");
   Serial.println(event.orientation.x, 4);
   if(event.orientation.x > 180.00){
-    analogWrite(15, 256);
+    digitalWrite(15, HIGH);
     Serial.println("Within threshold");
   }
 
