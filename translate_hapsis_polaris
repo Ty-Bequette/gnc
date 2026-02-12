@@ -1,0 +1,68 @@
+#include <Adafruit_BNO055.h>
+#include <Adafruit_Sensor.h>
+#include <Wire.h>
+
+void setup() {
+  //PID constants (Based on Simulation)
+  double Kp = 0.56;
+  double Kd = 0.50;
+
+  // Desired heading
+  // 0 -> North
+  // 90 -> East
+  // 180 -> South
+  // 270 -> West
+  int setpoint = 0;  //(Degrees) Point north
+
+  //PID variables
+  double previous_error = 0;
+  unsigned long last_time = millis();
+
+  //Thruster Control Variables
+  bool positive_thruster_on = false;
+  bool negative_thruster_on = false;
+  // int thruster_off_time = 0  // When to turn off the thruster, unused
+
+  int red_led = 9;
+  int green_led = 6;
+  int yellow_led = 5;
+  int pos_thrust = 13;
+  int neg_thrust = 12;
+
+  //Setup LEDs to display status
+  //RED = FAILURE
+  //GREEN Blinking = Alive and Running
+  //YELLOW Blinking = Waiting for Avionics Send
+  //Change from original: pins are the LEDs, change using digitalWrite
+  Wire.begin();
+  pinMode(red_led, OUTPUT);
+  pinMode(green_led, OUTPUT);
+  pinMode(yellow_led, OUTPUT);
+  pinMode(pos_thrust, OUTPUT);
+  pinMode(neg_thrust, OUTPUT);
+  
+  for(int count = 0; count < 5; count++) {
+    digitalWrite(yellow_led, HIGH);
+    delay(250);
+    digitalWrite(yellow_led, LOW);
+    delay(250);
+  }
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+
+}
+
+bool main_loop() {
+
+}
+
+
+
+
+
+
+
+
