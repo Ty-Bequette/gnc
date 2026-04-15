@@ -37,5 +37,6 @@
 /* 5000 feet */
 #define GNC_ACTIVATION_ACCEL 2.0 // Vertical acceleration threshold to trigger GNC (m/s^2)
 
+#define BNO055_SAMPLERATE_DELAY_MS (100)
 
 #endif
