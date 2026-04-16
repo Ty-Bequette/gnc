@@ -45,6 +45,7 @@ private:
   // Wrap angle error to -180 to +180
   float wrapAngle(float angle);
 };
+
 #endif // PID_CONTROLLER_H
 
 // Global sensor and controller objects initialized
@@ -59,7 +60,9 @@ PIDController::PIDController(float kp, float kd, float ki)
 void PIDController::setGains(float kp, float kd, float ki) {
   this->kp = kp;
   this->kd = kd;
-  this->ki = ki;}
+  this->ki = ki;
+}
+
 void PIDController::setSetpoint(float setpoint) {
   this->setpoint = setpoint;}
 float PIDController::wrapAngle(float angle) {
@@ -69,7 +72,9 @@ float PIDController::wrapAngle(float angle) {
   while (angle < -180.0) {
     angle += 360.0;
   } 
-  return angle;}
+  return angle;
+}
+
 float PIDController::compute(float currentValue, float deltaTime) {
   // Calculate error with wraparound handling
   float error = wrapAngle(setpoint - currentValue);
@@ -93,7 +98,8 @@ float PIDController::compute(float currentValue, float deltaTime) {
   lastDerivative = derivative;
   lastOutput = output;
   
-  return output;}
+  return output;
+}
 
 void PIDController::reset() {
   lastError = 0.0;
@@ -131,11 +137,11 @@ void setup(void)
 }
 
 // IMU (Inertial Measurement Unit) data pulling function
-void IMUdata (float &zAxis){
+void IMUdata (float &currentHeading){
   sensors_event_t event;
   bno.getEvent(&event);
 
-  zAxis = event.orientation.z;
+  currentHeading = event.orientation.z;
 }
 
 void loop()

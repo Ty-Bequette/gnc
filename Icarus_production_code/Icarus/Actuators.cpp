@@ -2,102 +2,83 @@
 #include "Arduino.h"
 #include "Actuators.h"
 
-static bool leftThrusterOn = false;
-static bool rightThrusterOn = false;
+static bool positiveThrusterON = false;
+static bool negativeThrusterON = false;
 static unsigned long thrusterOnTime = 0;
 
 void initActuators() {
   // Configure thruster pins
-  pinMode(THRUSTER_LEFT, OUTPUT);
-  pinMode(THRUSTER_RIGHT, OUTPUT);
-  
-  // Configure pyro pins
-  pinMode(PYRO_DETATCH_1, OUTPUT);
-  pinMode(PYRO_DETATCH_2, OUTPUT);
-  pinMode(PYRO_POP, OUTPUT);
-  
+  pinMode(THRUSTER_POSITIVE_2, OUTPUT);
+  pinMode(THRUSTER_POSITIVE_4, OUTPUT);
+  pinMode(THRUSTER_NEGATIVE_1, OUTPUT);
+  pinMode(THRUSTER_NEGATIVE_3, OUTPUT);
+
   // Ensure all outputs are off
   disableAllActuators();
   
-  Serial.println("Thrusters and Pyro initialized");
+  Serial.println("Thrusters initialized");
 }
 
 void controlThrusters(float pidOutput) {
   // Apply deadzone
   // If output is within deadzone, turn off thrusters
   if (abs(pidOutput) < PID_DEADZONE) {
-    digitalWrite(THRUSTER_LEFT, LOW);
-    digitalWrite(THRUSTER_RIGHT, LOW);
-    leftThrusterOn = false;
-    rightThrusterOn = false;
+    digitalWrite(THRUSTER_POSITIVE_2, LOW);
+    digitalWrite(THRUSTER_POSITIVE_4, LOW);
+    digitalWrite(THRUSTER_NEGATIVE_1, LOW);
+    digitalWrite(THRUSTER_NEGATIVE_3, LOW);
+    positiveThrusterON = false;
+    negativeThrusterON = false;
     return;
   }
   
   // Determine which thruster to fire
   if (pidOutput > 0) {
     // Fire LEFT thruster (positive torque)
-    if (!leftThrusterOn) {
-      digitalWrite(THRUSTER_LEFT, HIGH);
-      digitalWrite(THRUSTER_RIGHT, LOW);
-      leftThrusterOn = true;
-      rightThrusterOn = false;
+    if (!negativeThrusterON) {
+      digitalWrite(THRUSTER_POSITIVE_2, HIGH);
+      digitalWrite(THRUSTER_POSITIVE_4, HIGH);
+      digitalWrite(THRUSTER_NEGATIVE_1, LOW);
+      digitalWrite(THRUSTER_NEGATIVE_3, LOW);
+      positiveThrusterON = true;
+      negativeThrusterON = false;
       thrusterOnTime = millis();
     }
   } else {
     // Fire RIGHT thruster (negative torque)
-    if (!rightThrusterOn) {
-      digitalWrite(THRUSTER_LEFT, LOW);
-      digitalWrite(THRUSTER_RIGHT, HIGH);
-      leftThrusterOn = false;
-      rightThrusterOn = true;
+    if (!negativeThrusterON) {
+      digitalWrite(THRUSTER_POSITIVE_2, LOW);
+      digitalWrite(THRUSTER_POSITIVE_4, LOW);
+      digitalWrite(THRUSTER_NEGATIVE_1, HIGH);
+      digitalWrite(THRUSTER_NEGATIVE_3, HIGH);
+      positiveThrusterON = false;
+      negativeThrusterON = true;
       thrusterOnTime = millis();
     }
   }
   
   // Enforce minimum pulse duration
-  if ((leftThrusterOn || rightThrusterOn) && 
+  if ((positiveThrusterON || negativeThrusterON) && 
       (millis() - thrusterOnTime < MIN_THRUSTER_PULSE)) {
     // Keep thruster on for minimum duration
     return;
   }
 }
 
-void firePyros() {
-  Serial.println("FIRING PYRO CHARGES!");
-  
-  // Fire both pyro channels
-  // TODO: change this to fire sequentially, implement continuity.
-  digitalWrite(PYRO_DETATCH_1, HIGH);
-  digitalWrite(PYRO_DETATCH_2, HIGH);
-  digitalWrite(PYRO_POP, HIGH);
- 
-  // TODO: add non-blocking timing to turn off after 1 second, and implement continuity checks
-
-
-  
-  // Turn off pyro channels
-  digitalWrite(PYRO_DETATCH_1, LOW);
-  digitalWrite(PYRO_DETATCH_2, LOW);
-  digitalWrite(PYRO_POP, LOW);
-  
-  Serial.println("Pyro firing complete");
-}
-
 void disableAllActuators() {
-  digitalWrite(THRUSTER_LEFT, LOW);
-  digitalWrite(THRUSTER_RIGHT, LOW);
-  digitalWrite(PYRO_DETATCH_1, LOW);
-  digitalWrite(PYRO_DETATCH_2, LOW);
-  digitalWrite(PYRO_POP, LOW);
+  digitalWrite(THRUSTER_POSITIVE_2, LOW);
+  digitalWrite(THRUSTER_POSITIVE_4, LOW);
+  digitalWrite(THRUSTER_NEGATIVE_1, LOW);
+  digitalWrite(THRUSTER_NEGATIVE_3, LOW);
   
-  leftThrusterOn = false;
-  rightThrusterOn = false;
+  positiveThrusterON = false;
+  negativeThrusterON = false;
 }
 
 bool getLeftThrusterState() {
-  return leftThrusterOn;
+  return positiveThrusterON;
 }
 
 bool getRightThrusterState() {
-  return rightThrusterOn;
+  return negativeThrusterON;
 }

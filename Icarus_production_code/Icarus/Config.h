@@ -7,13 +7,10 @@
 //todo: update these pin numbers based on actual wiring
 
 // Thruster Control Pins
-#define THRUSTER_LEFT  10  // Positive torque
-#define THRUSTER_RIGHT 11  // Negative torque
-
-// Pyro Control Pins
-#define PYRO_DETATCH_1 12
-#define PYRO_DETATCH_2 13
-#define PYRO_POP       14
+#define THRUSTER_POSITIVE_2  38  // Positive torque (Nozzle 2)
+#define THRUSTER_POSITIVE_4  39  // Positive torque (Nozzle 4)
+#define THRUSTER_NEGATIVE_1  40  // Negative torque (Nozzle 1)
+#define THRUSTER_NEGATIVE_3  41  // Negative torque (Nozzle 3)
 
 /* TIMING */
 #define LOOP_PERIOD 10 // 100Hz Loop
