@@ -12,10 +12,13 @@
 #define THRUSTER_NEGATIVE_1  40  // Negative torque (Nozzle 1)
 #define THRUSTER_NEGATIVE_3  41  // Negative torque (Nozzle 3)
 
+#define LED 13 // LED pin
+
 /* TIMING */
 #define LOOP_PERIOD 10 // 100Hz Loop
 #define LOG_PERIOD  100 // 10Hz Logging 
 #define MIN_THRUSTER_PULSE 50 // Minimum thruster pulse duration in ms
+#define BLINK_PERIOD 500 // LED 2Hz loop
 
 /* PID CONFIG */
 #define PID_KP 1.0

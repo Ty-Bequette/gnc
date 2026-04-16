@@ -109,6 +109,8 @@ void PIDController::reset() {
 
 void setup(void)
 {
+  pinMode(LED, OUTPUT);
+
   Serial.begin(115200); // opens the serial monitor connection and verifies the BNO055 sensor is physically wired correctly
 
   while (!Serial) delay(10);  // wait for serial port to open!
@@ -147,6 +149,11 @@ void IMUdata (float &currentHeading){
 void loop()
 {
   currentTime = millis();
+
+  if (currentTime >= lastLoopTime + BLINK_PERIOD)
+  {
+    digitalWrite(LED, !digitalRead(LED));
+  }
 
   // Consistent 100Hz loop for state management and control
   // Non-blocking
